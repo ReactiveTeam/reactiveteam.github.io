@@ -1,0 +1,215 @@
+<html><head><meta charset="UTF-8"><link rel="import" href="code-app.html"></head><body><div hidden="" by-vulcanize=""><script>!function(){"use strict";function e(e,t){var n="";if(e){var i=e.toLowerCase();" "===i||v.test(i)?n="space":f.test(i)?n="esc":1==i.length?t&&!u.test(i)||(n=i):n=c.test(i)?i.replace("arrow",""):"multiply"==i?"*":i}return n}function t(e){var t="";return e&&(e in o?t=o[e]:h.test(e)?(e=parseInt(e.replace("U+","0x"),16),t=String.fromCharCode(e).toLowerCase()):t=e.toLowerCase()),t}function n(e){var t="";return Number(e)&&(t=e>=65&&e<=90?String.fromCharCode(32+e):e>=112&&e<=123?"f"+(e-112):e>=48&&e<=57?String(e-48):e>=96&&e<=105?String(e-96):d[e]),t}function i(i,r){return i.key?e(i.key,r):i.detail&&i.detail.key?e(i.detail.key,r):t(i.keyIdentifier)||n(i.keyCode)||""}function r(e,t){return i(t,e.hasModifiers)===e.key&&(!e.hasModifiers||!!t.shiftKey==!!e.shiftKey&&!!t.ctrlKey==!!e.ctrlKey&&!!t.altKey==!!e.altKey&&!!t.metaKey==!!e.metaKey)}function s(e){return 1===e.length?{combo:e,key:e,event:"keydown"}:e.split("+").reduce(function(e,t){var n=t.split(":"),i=n[0],r=n[1];return i in y?(e[y[i]]=!0,e.hasModifiers=!0):(e.key=i,e.event=r||"keydown"),e},{combo:e.split(":").shift()})}function a(e){return e.trim().split(" ").map(function(e){return s(e)})}var o={"U+0008":"backspace","U+0009":"tab","U+001B":"esc","U+0020":"space","U+007F":"del"},d={8:"backspace",9:"tab",13:"enter",27:"esc",33:"pageup",34:"pagedown",35:"end",36:"home",32:"space",37:"left",38:"up",39:"right",40:"down",46:"del",106:"*"},y={shift:"shiftKey",ctrl:"ctrlKey",alt:"altKey",meta:"metaKey"},u=/[a-z0-9*]/,h=/U\+/,c=/^arrow/,v=/^space(bar)?/,f=/^escape$/;Polymer.IronA11yKeysBehavior={properties:{keyEventTarget:{type:Object,value:function(){return this}},stopKeyboardEventPropagation:{type:Boolean,value:!1},_boundKeyHandlers:{type:Array,value:function(){return[]}},_imperativeKeyBindings:{type:Object,value:function(){return{}}}},observers:["_resetKeyEventListeners(keyEventTarget, _boundKeyHandlers)"],keyBindings:{},registered:function(){this._prepKeyBindings()},attached:function(){this._listenKeyEventListeners()},detached:function(){this._unlistenKeyEventListeners()},addOwnKeyBinding:function(e,t){this._imperativeKeyBindings[e]=t,this._prepKeyBindings(),this._resetKeyEventListeners()},removeOwnKeyBindings:function(){this._imperativeKeyBindings={},this._prepKeyBindings(),this._resetKeyEventListeners()},keyboardEventMatchesKeys:function(e,t){for(var n=a(t),i=0;i<n.length;++i)if(r(n[i],e))return!0;return!1},_collectKeyBindings:function(){var e=this.behaviors.map(function(e){return e.keyBindings});return e.indexOf(this.keyBindings)===-1&&e.push(this.keyBindings),e},_prepKeyBindings:function(){this._keyBindings={},this._collectKeyBindings().forEach(function(e){for(var t in e)this._addKeyBinding(t,e[t])},this);for(var e in this._imperativeKeyBindings)this._addKeyBinding(e,this._imperativeKeyBindings[e]);for(var t in this._keyBindings)this._keyBindings[t].sort(function(e,t){var n=e[0].hasModifiers;return n===t[0].hasModifiers?0:n?-1:1})},_addKeyBinding:function(e,t){a(e).forEach(function(e){this._keyBindings[e.event]=this._keyBindings[e.event]||[],this._keyBindings[e.event].push([e,t])},this)},_resetKeyEventListeners:function(){this._unlistenKeyEventListeners(),this.isAttached&&this._listenKeyEventListeners()},_listenKeyEventListeners:function(){this.keyEventTarget&&Object.keys(this._keyBindings).forEach(function(e){var t=this._keyBindings[e],n=this._onKeyBindingEvent.bind(this,t);this._boundKeyHandlers.push([this.keyEventTarget,e,n]),this.keyEventTarget.addEventListener(e,n)},this)},_unlistenKeyEventListeners:function(){for(var e,t,n,i;this._boundKeyHandlers.length;)e=this._boundKeyHandlers.pop(),t=e[0],n=e[1],i=e[2],t.removeEventListener(n,i)},_onKeyBindingEvent:function(e,t){if(this.stopKeyboardEventPropagation&&t.stopPropagation(),!t.defaultPrevented)for(var n=0;n<e.length;n++){var i=e[n][0],s=e[n][1];if(r(i,t)&&(this._triggerKeyHandler(i,s,t),t.defaultPrevented))return}},_triggerKeyHandler:function(e,t,n){var i=Object.create(e);i.keyboardEvent=n;var r=new CustomEvent(e.event,{detail:i,cancelable:!0});this[t].call(this,r),r.defaultPrevented&&n.preventDefault()}}}();</script><dom-module id="iron-list" assetpath="../bower_components/iron-list/">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      @media only screen and (-webkit-max-device-pixel-ratio: 1) {
+        :host {
+          will-change: transform;
+        }
+      }
+
+      #items {
+        @apply(--iron-list-items-container);
+        position: relative;
+      }
+
+      :host(:not([grid])) #items > ::content > * {
+        width: 100%;
+      }
+
+      #items > ::content > * {
+        box-sizing: border-box;
+        margin: 0;
+        position: absolute;
+        top: 0;
+        will-change: transform;
+      }
+    </style>
+
+    <array-selector id="selector" items="{{items}}" selected="{{selectedItems}}" selected-item="{{selectedItem}}">
+    </array-selector>
+
+    <div id="items">
+      <content></content>
+    </div>
+
+  </template>
+</dom-module>
+
+<script>!function(){var t=navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/),e=t&&t[1]>=8;Polymer({is:"iron-list",properties:{items:{type:Array},maxPhysicalCount:{type:Number,value:500},as:{type:String,value:"item"},indexAs:{type:String,value:"index"},selectedAs:{type:String,value:"selected"},grid:{type:Boolean,value:!1,reflectToAttribute:!0},selectionEnabled:{type:Boolean,value:!1},selectedItem:{type:Object,notify:!0},selectedItems:{type:Object,notify:!0},multiSelection:{type:Boolean,value:!1},scrollOffset:{type:Number,value:0}},observers:["_itemsChanged(items.*)","_selectionEnabledChanged(selectionEnabled)","_multiSelectionChanged(multiSelection)","_setOverflow(scrollTarget, scrollOffset)"],behaviors:[Polymer.Templatizer,Polymer.IronResizableBehavior,Polymer.IronA11yKeysBehavior,Polymer.IronScrollTargetBehavior],keyBindings:{up:"_didMoveUp",down:"_didMoveDown",enter:"_didEnter"},_ratio:.5,_scrollerPaddingTop:0,_scrollPosition:0,_physicalSize:0,_physicalAverage:0,_physicalAverageCount:0,_physicalTop:0,_virtualCount:0,_physicalIndexForKey:null,_estScrollHeight:0,_scrollHeight:0,_viewportHeight:0,_viewportWidth:0,_physicalItems:null,_physicalSizes:null,_firstVisibleIndexVal:null,_lastVisibleIndexVal:null,_collection:null,_maxPages:2,_focusedItem:null,_focusedIndex:-1,_offscreenFocusedItem:null,_focusBackfillItem:null,_itemsPerRow:1,_itemWidth:0,_rowHeight:0,_templateCost:0,get _physicalBottom(){return this._physicalTop+this._physicalSize},get _scrollBottom(){return this._scrollPosition+this._viewportHeight},get _virtualEnd(){return this._virtualStart+this._physicalCount-1},get _hiddenContentSize(){return(this.grid?this._physicalRows*this._rowHeight:this._physicalSize)-this._viewportHeight},get _itemsParent(){return Polymer.dom(Polymer.dom(this._userTemplate).parentNode)},get _maxScrollTop(){return this._estScrollHeight-this._viewportHeight+this._scrollOffset},_minVirtualStart:0,get _maxVirtualStart(){return Math.max(0,this._virtualCount-this._physicalCount)},_virtualStartVal:0,set _virtualStart(t){t=Math.min(this._maxVirtualStart,Math.max(this._minVirtualStart,t)),this.grid&&(t-=t%this._itemsPerRow),this._virtualStartVal=t},get _virtualStart(){return this._virtualStartVal||0},_physicalStartVal:0,set _physicalStart(t){t%=this._physicalCount,t<0&&(t=this._physicalCount+t),this.grid&&(t-=t%this._itemsPerRow),this._physicalStartVal=t,this._physicalEnd=(this._physicalStart+this._physicalCount-1)%this._physicalCount},get _physicalStart(){return this._physicalStartVal||0},_physicalCountVal:0,set _physicalCount(t){this._physicalCountVal=t,this._physicalEnd=(this._physicalStart+this._physicalCount-1)%this._physicalCount},get _physicalCount(){return this._physicalCountVal},_physicalEnd:0,get _optPhysicalSize(){return this.grid?this._estRowsInView*this._rowHeight*this._maxPages:0===this._viewportHeight?1/0:this._viewportHeight*this._maxPages},get _isVisible(){return Boolean(this.offsetWidth||this.offsetHeight)},get firstVisibleIndex(){var t=this._firstVisibleIndexVal;if(null==t){var e=this._physicalTop+this._scrollOffset;t=this._iterateItems(function(t,i){return e+=this._getPhysicalSizeIncrement(t),e>this._scrollPosition?this.grid?i-i%this._itemsPerRow:i:this.grid&&this._virtualCount-1===i?i-i%this._itemsPerRow:void 0})||0,this._firstVisibleIndexVal=t}return t},get lastVisibleIndex(){var t=this._lastVisibleIndexVal;if(null==t){if(this.grid)t=Math.min(this._virtualCount,this.firstVisibleIndex+this._estRowsInView*this._itemsPerRow-1);else{var e=this._physicalTop+this._scrollOffset;this._iterateItems(function(i,s){e<this._scrollBottom&&(t=s),e+=this._getPhysicalSizeIncrement(i)})}this._lastVisibleIndexVal=t}return t},get _defaultScrollTarget(){return this},get _virtualRowCount(){return Math.ceil(this._virtualCount/this._itemsPerRow)},get _estRowsInView(){return Math.ceil(this._viewportHeight/this._rowHeight)},get _physicalRows(){return Math.ceil(this._physicalCount/this._itemsPerRow)},get _scrollOffset(){return this._scrollerPaddingTop+this.scrollOffset},ready:function(){this.addEventListener("focus",this._didFocus.bind(this),!0)},attached:function(){0===this._physicalCount&&this._debounceTemplate(this._render),this.listen(this,"iron-resize","_resizeHandler")},detached:function(){this.unlisten(this,"iron-resize","_resizeHandler")},_setOverflow:function(t){this.style.webkitOverflowScrolling=t===this?"touch":"",this.style.overflow=t===this?"auto":"",this._lastVisibleIndexVal=null,this._firstVisibleIndexVal=null,this._debounceTemplate(this._render)},updateViewportBoundaries:function(){var t=window.getComputedStyle(this);this._scrollerPaddingTop=this.scrollTarget===this?0:parseInt(t["padding-top"],10),this._isRTL=Boolean("rtl"===t.direction),this._viewportWidth=this.$.items.offsetWidth,this._viewportHeight=this._scrollTargetHeight,this.grid&&this._updateGridMetrics()},_scrollHandler:function(){var t=Math.max(0,Math.min(this._maxScrollTop,this._scrollTop)),e=t-this._scrollPosition,i=e>=0;if(this._scrollPosition=t,this._firstVisibleIndexVal=null,this._lastVisibleIndexVal=null,Math.abs(e)>this._physicalSize){e-=this._scrollOffset;var s=Math.round(e/this._physicalAverage)*this._itemsPerRow;this._physicalTop=this._physicalTop+e,this._virtualStart=this._virtualStart+s,this._physicalStart=this._physicalStart+s,this._update()}else{var h=this._getReusables(i);i?(this._physicalTop=h.physicalTop,this._virtualStart=this._virtualStart+h.indexes.length,this._physicalStart=this._physicalStart+h.indexes.length):(this._virtualStart=this._virtualStart-h.indexes.length,this._physicalStart=this._physicalStart-h.indexes.length),0===h.indexes.length?this._increasePoolIfNeeded():this._update(h.indexes,i?null:h.indexes)}},_getReusables:function(t){var e,i,s,h=[],l=this._hiddenContentSize*this._ratio,o=this._virtualStart,n=this._virtualEnd,a=this._physicalCount,r=this._physicalTop+this._scrollOffset,c=this._physicalBottom+this._scrollOffset,_=this._scrollTop,u=this._scrollBottom;for(t?(e=this._physicalStart,this._physicalEnd,i=_-r):(e=this._physicalEnd,this._physicalStart,i=c-u);;){if(s=this._getPhysicalSizeIncrement(e),i-=s,h.length>=a||i<=l)break;if(t){if(n+h.length+1>=this._virtualCount)break;if(r+s>=_-this._scrollOffset)break;h.push(e),r+=s,e=(e+1)%a}else{if(o-h.length<=0)break;if(r+this._physicalSize-s<=u)break;h.push(e),r-=s,e=0===e?a-1:e-1}}return{indexes:h,physicalTop:r-this._scrollOffset}},_update:function(t,e){if(!t||0!==t.length){if(this._manageFocus(),this._assignModels(t),this._updateMetrics(t),e)for(;e.length;){var i=e.pop();this._physicalTop-=this._getPhysicalSizeIncrement(i)}this._positionItems(),this._updateScrollerSize(),this._increasePoolIfNeeded()}},_createPool:function(t){var e=new Array(t);this._ensureTemplatized();for(var i=0;i<t;i++){var s=this.stamp(null);e[i]=s.root.querySelector("*"),this._itemsParent.appendChild(s.root)}return e},_increasePoolIfNeeded:function(){var t=this,e=this._physicalBottom+this._scrollOffset>=this._scrollBottom&&this._physicalTop-this._scrollOffset<=this._scrollPosition;if(this._physicalSize>=this._optPhysicalSize&&e)return!1;var i=Math.round(.5*this._physicalCount);return e?(this._yield(function(){t._increasePool(Math.min(i,Math.max(1,Math.round(50/t._templateCost))))}),!0):(this._debounceTemplate(this._increasePool.bind(this,i)),!0)},_yield:function(t){var e=window,i=e.requestIdleCallback?e.requestIdleCallback(t):e.setTimeout(t,16);Polymer.dom.addDebouncer({complete:function(){e.cancelIdleCallback?e.cancelIdleCallback(i):e.clearTimeout(i),t()}})},_increasePool:function(t){var e=Math.min(this._physicalCount+t,this._virtualCount-this._virtualStart,Math.max(this.maxPhysicalCount,3)),i=this._physicalCount,s=e-i,h=window.performance.now();s<=0||([].push.apply(this._physicalItems,this._createPool(s)),[].push.apply(this._physicalSizes,new Array(s)),this._physicalCount=i+s,this._physicalStart>this._physicalEnd&&this._isIndexRendered(this._focusedIndex)&&this._getPhysicalIndex(this._focusedIndex)<this._physicalEnd&&(this._physicalStart=this._physicalStart+s),this._update(),this._templateCost=(window.performance.now()-h)/s)},_render:function(){if(this.isAttached&&this._isVisible)if(0===this._physicalCount)this.updateViewportBoundaries(),this._increasePool(3);else{var t=this._getReusables(!0);this._physicalTop=t.physicalTop,this._virtualStart=this._virtualStart+t.indexes.length,this._physicalStart=this._physicalStart+t.indexes.length,this._update(t.indexes),this._update()}},_ensureTemplatized:function(){if(!this.ctor){var t={};t.__key__=!0,t[this.as]=!0,t[this.indexAs]=!0,t[this.selectedAs]=!0,t.tabIndex=!0,this._instanceProps=t,this._userTemplate=this.queryEffectiveChildren("template"),this._userTemplate?this.templatize(this._userTemplate):console.warn("iron-list requires a template to be provided in light-dom")}},_getStampedChildren:function(){return this._physicalItems},_forwardInstancePath:function(t,e,i){0===e.indexOf(this.as+".")&&this.notifyPath("items."+t.__key__+"."+e.slice(this.as.length+1),i)},_forwardParentProp:function(t,e){(this._physicalItems||[]).concat([this._offscreenFocusedItem,this._focusBackfillItem]).forEach(function(i){i&&(i._templateInstance[t]=e)})},_forwardParentPath:function(t,e){(this._physicalItems||[]).concat([this._offscreenFocusedItem,this._focusBackfillItem]).forEach(function(i){i&&i._templateInstance.notifyPath(t,e,!0)})},_forwardItemPath:function(t,e){if(this._physicalIndexForKey){var i=t.indexOf("."),s=t.substring(0,i<0?t.length:i),h=this._physicalIndexForKey[s],l=this._offscreenFocusedItem,o=l&&l._templateInstance.__key__===s?l:this._physicalItems[h];if(o&&o._templateInstance.__key__===s)if(i>=0)t=this.as+"."+t.substring(i+1),o._templateInstance.notifyPath(t,e,!0);else{var n=o._templateInstance[this.as];if(Array.isArray(this.selectedItems)){for(var a=0;a<this.selectedItems.length;a++)if(this.selectedItems[a]===n){this.set("selectedItems."+a,e);break}}else this.selectedItem===n&&this.set("selectedItem",e);o._templateInstance[this.as]=e}}},_itemsChanged:function(t){"items"===t.path?(this._virtualStart=0,this._physicalTop=0,this._virtualCount=this.items?this.items.length:0,this._collection=this.items?Polymer.Collection.get(this.items):null,this._physicalIndexForKey={},this._firstVisibleIndexVal=null,this._lastVisibleIndexVal=null,this._physicalCount=this._physicalCount||0,this._physicalItems=this._physicalItems||[],this._physicalSizes=this._physicalSizes||[],this._physicalStart=0,this._scrollTop>this._scrollOffset&&this._resetScrollPosition(0),this._removeFocusedItem(),this._debounceTemplate(this._render)):"items.splices"===t.path?(this._adjustVirtualIndex(t.value.indexSplices),this._virtualCount=this.items?this.items.length:0,this._debounceTemplate(this._render)):this._forwardItemPath(t.path.split(".").slice(1).join("."),t.value)},_adjustVirtualIndex:function(t){t.forEach(function(t){if(t.removed.forEach(this._removeItem,this),t.index<this._virtualStart){var e=Math.max(t.addedCount-t.removed.length,t.index-this._virtualStart);this._virtualStart=this._virtualStart+e,this._focusedIndex>=0&&(this._focusedIndex=this._focusedIndex+e)}},this)},_removeItem:function(t){this.$.selector.deselect(t),this._focusedItem&&this._focusedItem._templateInstance[this.as]===t&&this._removeFocusedItem()},_iterateItems:function(t,e){var i,s,h,l;if(2===arguments.length&&e){for(l=0;l<e.length;l++)if(i=e[l],s=this._computeVidx(i),null!=(h=t.call(this,i,s)))return h}else{for(i=this._physicalStart,s=this._virtualStart;i<this._physicalCount;i++,s++)if(null!=(h=t.call(this,i,s)))return h;for(i=0;i<this._physicalStart;i++,s++)if(null!=(h=t.call(this,i,s)))return h}},_computeVidx:function(t){return t>=this._physicalStart?this._virtualStart+(t-this._physicalStart):this._virtualStart+(this._physicalCount-this._physicalStart)+t},_assignModels:function(t){this._iterateItems(function(t,e){var i=this._physicalItems[t],s=i._templateInstance,h=this.items&&this.items[e];null!=h?(s[this.as]=h,s.__key__=this._collection.getKey(h),s[this.selectedAs]=this.$.selector.isSelected(h),s[this.indexAs]=e,s.tabIndex=this._focusedIndex===e?0:-1,this._physicalIndexForKey[s.__key__]=t,i.removeAttribute("hidden")):(s.__key__=null,i.setAttribute("hidden",""))},t)},_updateMetrics:function(t){Polymer.dom.flush();var e=0,i=0,s=this._physicalAverageCount,h=this._physicalAverage;this._iterateItems(function(t,s){i+=this._physicalSizes[t]||0,this._physicalSizes[t]=this._physicalItems[t].offsetHeight,e+=this._physicalSizes[t],this._physicalAverageCount+=this._physicalSizes[t]?1:0},t),this.grid?(this._updateGridMetrics(),this._physicalSize=Math.ceil(this._physicalCount/this._itemsPerRow)*this._rowHeight):this._physicalSize=this._physicalSize+e-i,this._physicalAverageCount!==s&&(this._physicalAverage=Math.round((h*s+e)/this._physicalAverageCount))},_updateGridMetrics:function(){this._itemWidth=this._physicalCount>0?this._physicalItems[0].getBoundingClientRect().width:200,this._rowHeight=this._physicalCount>0?this._physicalItems[0].offsetHeight:200,this._itemsPerRow=this._itemWidth?Math.floor(this._viewportWidth/this._itemWidth):this._itemsPerRow},_positionItems:function(){this._adjustScrollPosition();var t=this._physicalTop;if(this.grid){var e=this._itemsPerRow*this._itemWidth,i=(this._viewportWidth-e)/2;this._iterateItems(function(e,s){var h=s%this._itemsPerRow,l=Math.floor(h*this._itemWidth+i);this._isRTL&&(l*=-1),this.translate3d(l+"px",t+"px",0,this._physicalItems[e]),this._shouldRenderNextRow(s)&&(t+=this._rowHeight)})}else this._iterateItems(function(e,i){this.translate3d(0,t+"px",0,this._physicalItems[e]),t+=this._physicalSizes[e]})},_getPhysicalSizeIncrement:function(t){return this.grid?this._computeVidx(t)%this._itemsPerRow!==this._itemsPerRow-1?0:this._rowHeight:this._physicalSizes[t]},_shouldRenderNextRow:function(t){return t%this._itemsPerRow===this._itemsPerRow-1},_adjustScrollPosition:function(){var t=0===this._virtualStart?this._physicalTop:Math.min(this._scrollPosition+this._physicalTop,0);t>0&&(this._physicalTop=this._physicalTop-t,e||this._resetScrollPosition(this._scrollTop-t))},_resetScrollPosition:function(t){this.scrollTarget&&(this._scrollTop=t,this._scrollPosition=this._scrollTop)},_updateScrollerSize:function(t){this.grid?this._estScrollHeight=this._virtualRowCount*this._rowHeight:this._estScrollHeight=this._physicalBottom+Math.max(this._virtualCount-this._physicalCount-this._virtualStart,0)*this._physicalAverage,t=t||0===this._scrollHeight,t=t||this._scrollPosition>=this._estScrollHeight-this._physicalSize,t=t||this.grid&&this.$.items.style.height<this._estScrollHeight,(t||Math.abs(this._estScrollHeight-this._scrollHeight)>=this._optPhysicalSize)&&(this.$.items.style.height=this._estScrollHeight+"px",this._scrollHeight=this._estScrollHeight)},scrollToItem:function(t){return this.scrollToIndex(this.items.indexOf(t))},scrollToIndex:function(t){if(!("number"!=typeof t||t<0||t>this.items.length-1)&&(Polymer.dom.flush(),0!==this._physicalCount)){t=Math.min(Math.max(t,0),this._virtualCount-1),(!this._isIndexRendered(t)||t>=this._maxVirtualStart)&&(this._virtualStart=this.grid?t-2*this._itemsPerRow:t-1),this._manageFocus(),this._assignModels(),this._updateMetrics(),this._physicalTop=Math.floor(this._virtualStart/this._itemsPerRow)*this._physicalAverage;for(var e=this._physicalStart,i=this._virtualStart,s=0,h=this._hiddenContentSize;i<t&&s<=h;)s+=this._getPhysicalSizeIncrement(e),e=(e+1)%this._physicalCount,i++;this._updateScrollerSize(!0),this._positionItems(),this._resetScrollPosition(this._physicalTop+this._scrollOffset+s),this._increasePoolIfNeeded(),this._firstVisibleIndexVal=null,this._lastVisibleIndexVal=null}},_resetAverage:function(){this._physicalAverage=0,this._physicalAverageCount=0},_resizeHandler:function(){this._debounceTemplate(function(){var t=Math.abs(this._viewportHeight-this._scrollTargetHeight);this.updateViewportBoundaries(),("ontouchstart"in window||navigator.maxTouchPoints>0)&&t>0&&t<100||(this._isVisible?(this.toggleScrollListener(!0),this._resetAverage(),this._render()):this.toggleScrollListener(!1))}.bind(this))},_getModelFromItem:function(t){var e=this._collection.getKey(t),i=this._physicalIndexForKey[e];return null!=i?this._physicalItems[i]._templateInstance:null},_getNormalizedItem:function(t){if(void 0===this._collection.getKey(t)){if("number"==typeof t){if(t=this.items[t],!t)throw new RangeError("<item> not found");return t}throw new TypeError("<item> should be a valid item")}return t},selectItem:function(t){t=this._getNormalizedItem(t);var e=this._getModelFromItem(t);!this.multiSelection&&this.selectedItem&&this.deselectItem(this.selectedItem),e&&(e[this.selectedAs]=!0),this.$.selector.select(t),this.updateSizeForItem(t)},deselectItem:function(t){t=this._getNormalizedItem(t);var e=this._getModelFromItem(t);e&&(e[this.selectedAs]=!1),this.$.selector.deselect(t),this.updateSizeForItem(t)},toggleSelectionForItem:function(t){t=this._getNormalizedItem(t),this.$.selector.isSelected(t)?this.deselectItem(t):this.selectItem(t)},clearSelection:function(){function t(t){var e=this._getModelFromItem(t);e&&(e[this.selectedAs]=!1)}Array.isArray(this.selectedItems)?this.selectedItems.forEach(t,this):this.selectedItem&&t.call(this,this.selectedItem),this.$.selector.clearSelection()},_selectionEnabledChanged:function(t){(t?this.listen:this.unlisten).call(this,this,"tap","_selectionHandler")},_selectionHandler:function(t){var e=this.modelForElement(t.target);if(e){var i,s,h=Polymer.dom(t).path[0],l=this._itemsParent.node.domHost,o=Polymer.dom(l?l.root:document).activeElement,n=this._physicalItems[this._getPhysicalIndex(e[this.indexAs])];"input"!==h.localName&&"button"!==h.localName&&"select"!==h.localName&&(i=e.tabIndex,e.tabIndex=-100,s=o?o.tabIndex:-1,e.tabIndex=i,o&&n!==o&&n.contains(o)&&s!==-100||this.toggleSelectionForItem(e[this.as]))}},_multiSelectionChanged:function(t){this.clearSelection(),this.$.selector.multi=t},updateSizeForItem:function(t){t=this._getNormalizedItem(t);var e=this._collection.getKey(t),i=this._physicalIndexForKey[e];null!=i&&(this._updateMetrics([i]),this._positionItems())},_manageFocus:function(){var t=this._focusedIndex;t>=0&&t<this._virtualCount?this._isIndexRendered(t)?this._restoreFocusedItem():this._createFocusBackfillItem():this._virtualCount>0&&this._physicalCount>0&&(this._focusedIndex=this._virtualStart,this._focusedItem=this._physicalItems[this._physicalStart])},_isIndexRendered:function(t){return t>=this._virtualStart&&t<=this._virtualEnd},_isIndexVisible:function(t){return t>=this.firstVisibleIndex&&t<=this.lastVisibleIndex},_getPhysicalIndex:function(t){return this._physicalIndexForKey[this._collection.getKey(this._getNormalizedItem(t))]},_focusPhysicalItem:function(t){if(!(t<0||t>=this._virtualCount)){this._restoreFocusedItem(),this._isIndexRendered(t)||this.scrollToIndex(t);var e,i=this._physicalItems[this._getPhysicalIndex(t)],s=i._templateInstance;s.tabIndex=-100,i.tabIndex===-100&&(e=i),e||(e=Polymer.dom(i).querySelector('[tabindex="-100"]')),s.tabIndex=0,this._focusedIndex=t,e&&e.focus()}},_removeFocusedItem:function(){this._offscreenFocusedItem&&this._itemsParent.removeChild(this._offscreenFocusedItem),this._offscreenFocusedItem=null,this._focusBackfillItem=null,this._focusedItem=null,this._focusedIndex=-1},_createFocusBackfillItem:function(){var t=this._focusedIndex,e=this._getPhysicalIndex(t);if(!(this._offscreenFocusedItem||null==e||t<0)){if(!this._focusBackfillItem){var i=this.stamp(null);this._focusBackfillItem=i.root.querySelector("*"),this._itemsParent.appendChild(i.root)}this._offscreenFocusedItem=this._physicalItems[e],this._offscreenFocusedItem._templateInstance.tabIndex=0,this._physicalItems[e]=this._focusBackfillItem,this.translate3d(0,"-10000px",0,this._offscreenFocusedItem)}},_restoreFocusedItem:function(){var t,e=this._focusedIndex;!this._offscreenFocusedItem||this._focusedIndex<0||(this._assignModels(),t=this._getPhysicalIndex(e),null!=t&&(this._focusBackfillItem=this._physicalItems[t],this._focusBackfillItem._templateInstance.tabIndex=-1,this._physicalItems[t]=this._offscreenFocusedItem,this._offscreenFocusedItem=null,this.translate3d(0,"-10000px",0,this._focusBackfillItem)))},_didFocus:function(t){var e=this.modelForElement(t.target),i=this._focusedItem?this._focusedItem._templateInstance:null,s=null!==this._offscreenFocusedItem,h=this._focusedIndex;e&&i&&(i===e?this._isIndexVisible(h)||this.scrollToIndex(h):(this._restoreFocusedItem(),i.tabIndex=-1,e.tabIndex=0,h=e[this.indexAs],this._focusedIndex=h,this._focusedItem=this._physicalItems[this._getPhysicalIndex(h)],s&&!this._offscreenFocusedItem&&this._update()))},_didMoveUp:function(){this._focusPhysicalItem(this._focusedIndex-1)},_didMoveDown:function(t){t.detail.keyboardEvent.preventDefault(),this._focusPhysicalItem(this._focusedIndex+1)},_didEnter:function(t){this._focusPhysicalItem(this._focusedIndex),this._selectionHandler(t.detail.keyboardEvent)}})}();</script>
+</div><dom-module id="code-projects">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        background-color: #0a121d;
+        background-image: url('/images/backgrounds/projects.jpg'),
+                          url('/images/backgrounds/projects-bottom.jpg'),
+                          linear-gradient(0deg, #323D44, transparent 1300px);
+        background-repeat: no-repeat;
+        background-position: center top, center 212vw, center bottom;
+        background-size: 250%;
+        font-size: 14px;
+        line-height: 20px;
+      }
+
+      a {
+        font-size: 12px;
+      }
+
+      .splash {
+        padding-bottom: 60px;
+      }
+
+      #query {
+        margin-top: 50vw;
+        width: 400px;
+        max-width: 100%;
+        box-sizing: border-box;
+        padding: 6px 0 6px 30px;
+        background: url(data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cg%3E%3Cpath d=%22M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z%22 fill=%22%23FFFFFF%22%3E%3C/path%3E%3C/g%3E%3C/svg%3E);
+        background-repeat: no-repeat;
+        background-position: left center;
+        background-size: 24px 24px;
+        border: none;
+        border-bottom: 1px solid #FFF;
+        border-radius: 0;
+        font-size: 16px;
+        color: #FFF;
+      }
+
+      .splash,
+      .meta {
+        /* HACK(keanulee): Create stacking context so it is above iron-list and clickable. */
+        position: relative;
+        z-index: 1;
+      }
+
+      .meta {
+        margin: 0;
+        padding-bottom: 24px;
+        border-bottom: 1px solid var(--app-accent-color);
+        color: var(--app-accent-color);
+        font-style: italic;
+      }
+
+      iron-list {
+        /**
+         * HACK(keanulee): iron-list needs to have padding-top so that it occupies the entire height of the
+         * scroll area.
+         */
+        margin-top: -100vw;
+        padding-top: 100vw;
+      }
+
+      .project {
+        position: relative;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--app-accent-color);
+      }
+
+      .project > h2 {
+        font-family: 'ArcaMajora3-Heavy', sans-serif;
+        letter-spacing: 2px;
+      }
+
+      .project > p.link {
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .project > h2 > a {
+        display: inline-block;
+        border: 1px solid var(--app-accent-color);
+        padding: 12px;
+        color: inherit;
+        font-size: 18px;
+      }
+
+      .project > p.tags > a {
+        margin-right: 0.5em;
+      }
+
+      @media (min-width: 768px) {
+        :host {
+          background-position: center top, center 106vw, center bottom;
+          background-size: 100%;
+        }
+
+        .splash {
+          padding: 27vw 0 22vw;
+          background: url(data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cg%3E%3Cpath d=%22M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z%22 fill=%22%23FFFFFF%22%3E%3C/path%3E%3C/g%3E%3C/svg%3E);
+          background-repeat: no-repeat;
+          background-position: center 96%;
+          background-size: 32px 32px;
+        }
+
+        .project > span.licenses {
+          float: right;
+          margin-left: 24px;
+        }
+
+        #query {
+          margin-top: 0;
+        }
+      }
+    </style>
+
+    <div class="container">
+      <div class="splash">
+        <h1>our projects</h1>
+        <input id="query" type="text" value="{{queryParams.q::input}}" title="Search Projects">
+      </div>
+
+      <p class="meta">
+        [[matchedProjects.length]] Prototype Studios Open Source Projects [[_pluralize('Project', matchedProjects.length)]]
+        <template is="dom-if" if="[[queryParams.q]]">
+          matching "[[queryParams.q]]"
+        </template>
+        <template is="dom-if" if="[[queryParams.tag]]">
+          tagged with #[[queryParams.tag]]
+        </template>
+        <template is="dom-if" if="[[_hasQueryParams(queryParams.*)]]">
+          <a href="/#/">Show all projects</a>
+        </template>
+      </p>
+
+      <iron-list items="[[matchedProjects]]" scroll-target="document">
+        <template>
+          <div>
+            <div class="project">
+              <h2>
+                <a href$="[[_getProperty(item, 'External Link')]]" target="_blank">
+                  [[_getProperty(item, 'Software')]]
+                </a>
+              </h2>
+              <p class="link">
+                <a href$="[[_getProperty(item, 'Public Code Repo')]]" target="_blank">
+                  [[_getProperty(item, 'Public Code Repo')]]
+                </a>
+              </p>
+              <p>[[item.Description]]</p>
+              <span class="licenses">
+                <template is="dom-repeat" items="[[item.License]]" as="license">
+                  <a href$="[[_getLicenseLink(license)]]" target="_blank">[[_getLicenseName(license)]]</a>
+                </template>
+              </span>
+              <p class="tags">
+                <template is="dom-repeat" items="[[item.Categories]]" as="tag">
+                  <a href$="/?tag=[[tag]]">#[[tag]]</a>
+                </template>
+              </p>
+            </div>
+          </div>
+        </template>
+      </iron-list>
+    </div>
+  </template>
+
+  <script>Polymer({is:"code-projects",properties:{projects:Object,matchedProjects:Object,queryParams:Object,licenses:{type:Object,value:{ALv2:{"License Long Name":"Apache License 2.0","License Link":"https://www.apache.org/licenses/LICENSE-2.0"},ASL:{"License Long Name":"Apache Software License","License Link":"https://www.apache.org/licenses/"},BSDv3:{"License Long Name":"BSD 3-Clause 'New' or 'Revised' license","License Link":"http://opensource.org/licenses/BSD-3-Clause"},BSDv2:{"License Long Name":"BSD 2-Clause 'Simplified' or 'FreeBSD' license","License Link":"http://opensource.org/licenses/BSD-2-Clause"},FreeBSD:{"License Long Name":"BSD 2-Clause 'Simplified' or 'FreeBSD' license","License Link":"http://opensource.org/licenses/BSD-2-Clause"},BSD:{"License Long Name":"Berkeley Source Distribution","License Link":"http://en.wikipedia.org/wiki/BSD_licenses"},CC0:{"License Long Name":"Creative Commons Public Domain Dedication","License Link":"https://creativecommons.org/publicdomain/zero/1.0/"},CPL:{"License Long Name":"Common Public License","License Link":"http://opensource.org/licenses/cpl1.0.php"},CDDL:{"License Long Name":"Common Development and Distribution License","License Link":"http://en.wikipedia.org/wiki/Common_Development_and_Distribution_License"},COTS:{"License Long Name":"Commercial off-the-shelf","License Link":"http://en.wikipedia.org/wiki/Commercial_off-the-shelf"},EPL:{"License Long Name":"Eclipse Public License","License Link":"http://www.eclipse.org/legal/epl-v10.html"},GPR:{"License Long Name":"Government Purpose Rights","License Link":"http://www.acq.osd.mil/dpap/dars/dfars/html/current/227_71.htm"},UGPR:{"License Long Name":"Unlimited Government Purpose Rights","License Link":"http://www.acq.osd.mil/dpap/dars/dfars/html/current/227_71.htm"},GPLv3:{"License Long Name":"GNU General Public License (GPL) version 3","License Link":"http://www.gnu.org/licenses/gpl.html"},GPL:{"License Long Name":"GNU General Public License (GPL) version 3","License Link":"http://www.gnu.org/licenses/gpl.html"},GPLv2:{"License Long Name":"GNU General Public License (GPL) version 2","License Link":"http://www.gnu.org/licenses/old-licenses/gpl-2.0.html"},LGPL:{"License Long Name":"GNU Library or 'Lesser' General Public License (LGPL)","License Link":"http://www.gnu.org/licenses/lgpl.html"},MIT:{"License Long Name":"MIT License","License Link":"http://en.wikipedia.org/wiki/MIT_License"},MPLv2:{"License Long Name":"Mozilla Public License 2.0","License Link":"http://www.mozilla.org/MPL/2.0/"},NCSA:{"License Long Name":"NCSA/University of Illinois Open Source License","License Link":"http://directory.fsf.org/wiki/License:IllinoisNCSA"},NCSLA:{"License Long Name":"Non-Commercial Software License Agreement (CU14012)","License Link":"https://secure.nouvant.com/columbia/technology/cu14012/license/258"},"Public Domain":{"License Long Name":"Public Domain","License Link":"http://directory.fsf.org/wiki/License:PublicDomain"},SUN:{"License Long Name":"Sun Public License","License Link":"http://en.wikipedia.org/wiki/Sun_Public_License"},SPL:{"License Long Name":"Sun Public License","License Link":"http://en.wikipedia.org/wiki/Sun_Public_License"},CMUCS:{"License Long Name":"Carnegie Mellon University Software Licensing","License Link":"http://www.cs.cmu.edu/~helpext/software_licensing/index.html"},LLVM:{"License Long Name":"LLVM Release License","License Link":"http://llvm.org/releases/2.8/LICENSE.TXT"},HTK:{"License Long Name":"University of Cambridge HTK License","License Link":"http://llvm.org/releases/2.8/LICENSE.TXT"}}}},observers:["_setMatchedProjects(queryParams.*)"],created:function(){var e=new XMLHttpRequest;e.addEventListener("load",this._loadProjects.bind(this)),e.open("GET","/data/catalog.json"),e.send()},_loadProjects:function(e){this.projects=this._addSearchContent(JSON.parse(e.target.responseText)),this._setMatchedProjects()},_addSearchContent:function(e){for(var i=0;i<e.length;++i){var n=e[i];n._search=[n.Categories.join("*"),n.Contributors.join("*"),n.Description,n["External Link"],n.License.join("*"),n["Public Code Repo"],n.Software,n.Update_Date].join("*")}return e},_getProperty:function(e,i){return e[i]},_setMatchedProjects:function(){if(this.projects)if(this.queryParams){var e=this.queryParams.q||"",i=this.queryParams.tag||"",n=new RegExp(e,"i");this.matchedProjects=this.projects.filter(function(s){return(!e||n.exec(s._search))&&(!i||s.Categories.indexOf(i)!==-1)})}else this.matchedProjects=this.projects},_pluralize:function(e,i){return 1===i?e:e+"s"},_hasQueryParams:function(){return this.queryParams.q||this.queryParams.tag},_getLicenseLink:function(e){return null},_getLicenseName:function(e){return null}});</script>
+</dom-module>
+</body></html>

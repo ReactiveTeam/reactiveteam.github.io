@@ -1,0 +1,338 @@
+<html><head><meta charset="UTF-8"><link rel="import" href="code-app.html"></head><body><dom-module id="code-guide">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        background-color: #0B1011;
+        background-image: url('/images/backgrounds/guide.jpg'),
+                          linear-gradient(0deg, #323D44, transparent 1300px);
+        background-repeat: no-repeat;
+        background-position: center top, center bottom;
+        background-size: 250%;
+        font-size: 16px;
+        line-height: 24px;
+      }
+
+      .step > .step-image {
+        height: 60px;
+        background-repeat: no-repeat;
+        background-position: center bottom;
+        margin-bottom: 32px;
+      }
+
+      .step > .step-image.step-1 {
+        background-image: url('/images/guide-steps/1.png');
+      }
+
+      .step > .step-image.step-2 {
+        background-image: url('/images/guide-steps/2.png');
+      }
+
+      .step > .step-image.step-3 {
+        background-image: url('/images/guide-steps/3.png');
+      }
+
+      .step > .step-image.step-4 {
+        background-image: url('/images/guide-steps/4.png');
+      }
+
+      .step > .step-image.step-5 {
+        background-image: url('/images/guide-steps/5.png');
+      }
+
+      .step > .step-image.step-6 {
+        background-image: url('/images/guide-steps/6.png');
+      }
+
+      .step > .step-image.step-7 {
+        background-image: url('/images/guide-steps/7.png');
+      }
+
+      .step > .step-image.step-8 {
+        background-image: url('/images/guide-steps/8.png');
+      }
+
+      .step > .step-image.step-9 {
+        background-image: url('/images/guide-steps/10.png');
+        background-image: url('/images/guide-steps/9.png'), url('/images/guide-steps/10.png');
+        background-position: center top, center 100px;
+      }
+
+      .step > .step-image.step-10 {
+        background-image: url('/images/guide-steps/11.png'), url('/images/guide-steps/12.png'), url('/images/guide-steps/13.png');
+        background-position: center top, left 280px, right 280px;
+      }
+
+      .step > .step-image.step-11 {
+        background-image: url('/images/guide-steps/14.png');
+      }
+
+      .step > .step-image::after {
+        position: relative;
+        top: 74px;
+        display: block;
+        margin: 0 auto;
+        content: '';
+        width: 80px;
+        border-top: 1px solid var(--app-accent-color);
+      }
+
+      .step > h2,
+      .step > .description > p {
+        text-align: center;
+      }
+
+      .table-container {
+        overflow-y: auto;
+        font-size: 13px;
+      }
+
+      .table-container > table {
+        width: 600px;
+      }
+
+      @media (min-width: 768px) {
+        :host {
+          background-size: 100%;
+        }
+
+        .container {
+          max-width: 885px;
+        }
+
+        .step {
+          position: relative;
+          margin-bottom: 42px;
+        }
+
+        .step > .step-image {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 180px;
+          height: 100%;
+          background-position: center top;
+          margin-bottom: 0;
+        }
+
+        .step > .step-image::after {
+          content: none;
+        }
+
+        .step > h2 {
+          position: absolute;
+          margin: 0;
+          top: 0;
+          left: 110px;
+          width: 100px;
+          text-align: right;
+        }
+
+        .step > .description {
+          margin-left: 244px;
+          border-left: 1px solid var(--app-accent-color);
+          padding-left: 40px;
+        }
+
+        .step > .description > p {
+          text-align: left;
+        }
+      }
+    </style>
+
+    <div class="container">
+      <div class="splash">
+        <h1>How to Contribute</h1>
+      </div>
+
+      <div class="step">
+        <div class="step-image step-1"></div>
+        <h2>1</h2>
+        <div class="description">
+          <p>
+            Clone the repository of your choice.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-image step-2"></div>
+        <h2>2</h2>
+        <div class="description">
+          <p>
+            Either choose an open-issue and fix it <b>or</b> Improve our code by making changes to it.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-image step-3"></div>
+        <h2>3</h2>
+        <div class="description">
+          <p>
+            Make a pull-request to the <b>"develop"</b> branch on the repo.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-image step-4"></div>
+        <h2>4</h2>
+        <div class="description">
+          <p>
+            You will be requsted to sign a CLA (Contributers License Agreement), sign it and wait for the PR to be approved.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-image step-5"></div>
+        <h2>5</h2>
+        <div class="description">
+          <p>
+            Your code if had passed all checks and has been approved by one of the project managers, it will be merged.
+          </p>
+        </div>
+      </div>
+
+		  <div class="step">
+			<div class="step-image step-6"></div>
+			<h2>Overview</h2>
+			<div class="description">
+			  <p>
+				Projects made open sourced by our team is governed by either/both the GPLv3 License and the MIT License. Which states that modified code must be published openly and the license must always be kept throughout the development process. You are freely to use the projects here in private projects, for enteprise uses please contact us.
+			  </p>
+			</div>
+		  </div>
+
+			<div class="step">
+				<div class="step-image step-7"></div>
+				<h2>The Team</h2>
+				<div class="description table-container">
+				  <table>
+					<tbody><tr>
+					  <th>Name</th>
+					  <th>Title</th>
+					  <th>Phone</th>
+					  <th>Email</th>
+					</tr>
+
+					<template is="dom-repeat" items="[[sras]]">
+					  <tr>
+						<td>[[item.Name]]</td>
+						<td>[[item.Title]]</td>
+						<td>[[item.Phone]]</td>
+						<td>
+						  <a href$="[[_getMailtoHref(item.Email)]]" target="_blank">[[item.Email]]</a>
+						</td>
+					  </tr>
+					</template>
+				  </tbody></table>
+				</div>
+			  </div>
+      </div>
+    
+	
+    <div class="container">
+      <div class="splash">
+        <h1>How to Release with Us</h1>
+      </div>
+
+      <div class="step">
+        <div class="step-image step-1"></div>
+        <h2>1</h2>
+        <div class="description">
+          <p>
+            Submit a request to release your project with us through our Project Manager, <a href="mailto:haikalizz@prototypestd.cu.ma">Haikal Izzuddin</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-image step-2"></div>
+        <h2>2</h2>
+        <div class="description">
+          <p>
+            Receive approval from us to release your software under us.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-image step-3"></div>
+        <h2>3</h2>
+        <div class="description">
+          <p>
+            Register on <a href="http://github.com/join">Github</a> with the email you used to submit your request.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-image step-4"></div>
+        <h2>4</h2>
+        <div class="description">
+          <p>
+            You will be requsted to sign a CLA (Contributers License Agreement).
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-image step-5"></div>
+        <h2>5</h2>
+        <div class="description">
+          <p>
+            Follow up with us. We will help you join the Prototype Studios Org, build your team, or answer any questions.
+          </p>
+        </div>
+      </div>
+	  
+      <div class="step">
+        <div class="step-image step-6"></div>
+        <h2>6</h2>
+        <div class="description">
+          <p>
+            Transfer or import your source code into the Prototype Studios team on Github.
+          </p>
+        </div>
+      </div>
+	  
+      <div class="step">
+        <div class="step-image step-7"></div>
+        <h2>7</h2>
+        <div class="description">
+          <p>
+            Update the catalog at <a href="http://github.com/reactiveteam.github.io/data/catalog.json">here</a> to register your project meta-data.
+          </p>
+        </div>
+      </div>
+	  
+      <div class="step">
+        <div class="step-image step-8"></div>
+        <h2>8</h2>
+        <div class="description">
+          <p>
+            View your project on <a href="http://reactiveteam.github.io">reactiveteam.github.io</a> and socialize! View help.github.com/articles/be-social..
+          </p>
+        </div>
+      </div>
+
+        <div class="step-image step-9"></div>
+        <h2>Details</h2>
+        <div class="description">
+          <p>
+           Each piece of software is unique, and must be reviewed on a case-by-case basis. Generally speaking, however, the review process will address the following considerations:
+          </p>
+          <p>
+            Depending on the number of projects being assessed for release at any given time general workloads and backlogs, traversing the release process can take anywhere from 1 to 3 weeks. The process may take longer for complex requests.
+          </p>
+</div>
+        </div>
+      
+    
+  </template>
+
+  <script>Polymer({is:"code-guide",properties:{sras:Object},created:function(){var e=new XMLHttpRequest;e.addEventListener("load",this._loadSras.bind(this)),e.open("GET","/data/SRA.json"),e.send()},_loadSras:function(e){this.sras=JSON.parse(e.target.responseText)},_getMailtoHref:function(e){return"mailto:"+e}});</script>
+</dom-module>
+</body></html>
